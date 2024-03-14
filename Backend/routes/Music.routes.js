@@ -82,7 +82,7 @@ putRouter.patch('/updateuser/:ID', async (req, res) => {
 deleteRouter.delete('/deleteuser/:ID', async (req, res) => {
     try {
         const userId = req.params.ID;
-        const deletedUser = await music.findOneAndDelete({userId});
+        const deletedUser = await music.findOneAndDelete({ID:userId});
         res.status(200).json("deleted user");
     } catch (err) {
         console.error(err);
