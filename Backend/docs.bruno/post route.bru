@@ -1,0 +1,22 @@
+meta {
+  name: post route
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/adduser
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "ID":1,
+      "Singer":"Katy Perry",
+      "Song":"Fireworks",
+      "Language":"English",
+      "Created_By":"Jeevz"
+  }
+  
+}

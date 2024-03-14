@@ -54,7 +54,7 @@ postRouter.post('/adduser', async (req, res) => {
 putRouter.patch('/updateuser/:ID', async (req, res) => {
     try {
         const userId = req.params.ID;
-        const updateFields = req.body;
+        const { ID,Singer,Song,Language,Created_By } = req.body;
 
         const existingUser = await music.findOne({ID: userId });
 
@@ -64,7 +64,7 @@ putRouter.patch('/updateuser/:ID', async (req, res) => {
 
         const updatedUser = await music.findOneAndUpdate(
             { ID: userId },
-            { $set: updateFields },
+            { $set: { ID,Singer,Song,Language,Created_By } },
             { new: true }
         );
 

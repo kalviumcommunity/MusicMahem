@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express')
 const app = express()
 const bodyParser=require("body-parser")
+const {getRouter, postRouter, deleteRouter, putRouter} = require("./routes/Music.routes");
 const {connectdb, isConnectedNow} = require('./config/dbConn')
 app.use(bodyParser.json())
 app.use("/",getRouter)
