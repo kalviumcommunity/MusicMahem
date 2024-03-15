@@ -12,4 +12,5 @@ const connectdb=async()=>{
 const isConnectedNow = () =>{
     return (mongoose.connection.readyState === 1);
 }
+
 module.exports={connectdb,isConnectedNow};

@@ -1,5 +1,6 @@
 const express = require("express")
-
+const joi=require('joi')
+const jwt=require('jsonwebtoken')
 const getRouter = express.Router();
 const postRouter = express.Router();
 const putRouter = express.Router();
@@ -11,7 +12,25 @@ postRouter.use(express.json());
 putRouter.use(express.json());
 deleteRouter.use(express.json());
 
-getRouter.get('/getallusers', async (req, res) => {
+const schema = joi.object({
+    ID:joi.number().required(),
+    Singer:joi.string().required(),
+    Song:joi.string().required(),
+    Language:joi.string().required(),
+    Created_By:joi.string()
+})
+
+const authenticateToken = (req, res,next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]
+    if(token==null) return res.sendStatus(401)
+    jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,(err,user)=>{
+      if(err) return res.sendStatus(403)
+      next()
+    })
+  }
+
+getRouter.get('/getallusers',authenticateToken, async (req, res) => {
     try {
         const users = await music.find();
         res.status(200).json(users);
@@ -23,7 +42,7 @@ getRouter.get('/getallusers', async (req, res) => {
     }
 });
 
-getRouter.get('/getuser/:id', async (req, res) => {
+getRouter.get('/getuser/:id',authenticateToken, async (req, res) => {
     try {
         const userId = req.params.id;
         const user = await music.findById(userId);
@@ -37,11 +56,16 @@ getRouter.get('/getuser/:id', async (req, res) => {
 });
 
 
-postRouter.post('/adduser', async (req, res) => {
+postRouter.post('/adduser',authenticateToken, async (req, res) => {
+    const {error,value}=schema.validate(req.body,{abortEarly:false})
     try {
+        if(!error){
         const { ID,Singer,Song,Language,Created_By } = req.body;
         const newUser = await music.create({ ID,Singer,Song,Language,Created_By });
         res.status(201).json(newUser);
+    } else{
+        return(res.status(400).send({message:`Bad request,error:${error}`}))
+    }
     } catch (err) {
         console.log(err);
         return res.status(500).send({
@@ -50,36 +74,27 @@ postRouter.post('/adduser', async (req, res) => {
     }
 });
 
-
-putRouter.patch('/updateuser/:ID', async (req, res) => {
+putRouter.patch('/updateuser/:id',authenticateToken, async (req, res) => {
+    const {error,value}=schema.validate(req.body,{abortEarly:false})
     try {
-        const userId = req.params.ID;
-        const { ID,Singer,Song,Language,Created_By } = req.body;
-
-        const existingUser = await music.findOne({ID: userId });
-
-        if (!existingUser) {
-            return res.status(404).json({ message: 'User not found' });
+        if(!error){
+        const {id} = req.params;
+        const filter ={"ID":id}
+        let { ID,Singer,Song,Language,Created_By } = req.body;
+        const details = await music.findOneAndUpdate(filter,{ ID,Singer,Song,Language,Created_By });
+        res.status(200).json(details);
+        }else{
+            return(res.status(400).send({message:`error:${error}`}))
         }
-
-        const updatedUser = await music.findOneAndUpdate(
-            { ID: userId },
-            { $set: { ID,Singer,Song,Language,Created_By } },
-            { new: true }
-        );
-
-        res.status(200).json(updatedUser);
-    } catch (err) {
-        console.error(err);
+    }catch(err){
+        console.log(err);
         return res.status(500).send({
             message: "Internal server error"
-        });
+        })
     }
 });
 
-
-
-deleteRouter.delete('/deleteuser/:ID', async (req, res) => {
+deleteRouter.delete('/deleteuser/:ID',authenticateToken, async (req, res) => {
     try {
         const userId = req.params.ID;
         const deletedUser = await music.findOneAndDelete({ID:userId});
