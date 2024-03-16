@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import WelcomePage from "./SubComponent/WelcomePage";
 import axios from "axios";
+import './Home.css'
 
 export default function Home() {
     function getCookie(name) {
@@ -12,6 +13,7 @@ export default function Home() {
       const token = getCookie('token')
     
       const [data, setData] = useState([]);
+      const [filter,setFilter] = useState("All");
     
       const fetchData = async () => {
         try {
@@ -48,6 +50,15 @@ export default function Home() {
           console.log(err)
         }
       }
+
+      const filteredData = data.filter((item)=>{
+        if(filter === "All"){
+          return item
+        }
+        else if(item.Created_By.includes(filter)){
+          return item
+        }
+      })
     
   return (
     <div className='container'>
@@ -56,6 +67,12 @@ export default function Home() {
     <>
     <nav>
       <Link to={'/adduser'} ><button>Add</button></Link>
+            <select name="createdBy" id="CreatedBy" onChange={(e)=>{setFilter(e.target.value)}}>
+              <option value="All">All</option>
+              <option value="Sreela">Sreela</option>
+              <option value="Aleem">Aleem</option>
+              <option value="Jeevz">Jeevz</option>
+            </select>
     </nav>
     <table className='tableContainer'>
       <thead>
@@ -69,9 +86,9 @@ export default function Home() {
         </tr>
       </thead>
       <tbody>
-        {data.map((item,index) => (
+        {filteredData.map((item,index) => (
           <tr key={index} >
-            <td className='tableStyle'><Link to={'/update/${item._id}'}>Update</Link><button onClick={(e)=>handleDelete(item.ID) }>Delete</button></td>
+            <td className='tableStyle'><Link to={'/update/${item._id}'} className="updateButton">Update</Link><br /><br /><button onClick={(e)=>handleDelete(item.ID) } className="updateButton">Delete</button></td>
             <td className='tableStyle'>{item.ID}</td>
             <td className='tableStyle'>{item.Singer}</td>
             <td className='tableStyle'>{item.Song}</td>
