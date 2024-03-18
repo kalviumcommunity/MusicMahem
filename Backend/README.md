@@ -7,3 +7,7 @@ Here's how it works: You can make a list of your favorite singers and the songs 
 But it's not just about you! You can also see what other people like and discover new singers and songs. It's like exploring a giant music library with friends.
 
 Whether you're into old classics or the latest hits, Music Mayhem has something for everyone. It's a place where music lovers come together to talk about what they love and find new tunes to enjoy.
+
+Render deployment : https://musicmahem-1.onrender.com/main
+
+Netlify deployment : 
