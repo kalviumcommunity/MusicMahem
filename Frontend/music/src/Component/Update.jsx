@@ -29,7 +29,7 @@ function Update() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.patch(`http://localhost:3000/updateuser/${formData.ID}`,{ID :formData.ID,Singer:formData.Singer,Song:formData.Song,Language:formData.Language,Created_By:formData.Created_By},{headers:{authorization:`Bearer ${token}`}})
+    axios.patch(`https://musicmahem-1.onrender.com/updateuser/${formData.ID}`,{ID :formData.ID,Singer:formData.Singer,Song:formData.Song,Language:formData.Language,Created_By:formData.Created_By},{headers:{authorization:`Bearer ${token}`}})
     .then(result=>{console.log(result);
     navigate('/')})
     .catch(err=>console.log(err))

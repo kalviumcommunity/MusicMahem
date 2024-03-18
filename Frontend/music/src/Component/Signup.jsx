@@ -18,7 +18,7 @@ function Signup() {
     }
         const submit=(e)=>{
             e.preventDefault();
-            axios.post('http://localhost:3000/signup',{
+            axios.post('https://musicmahem-1.onrender.com/signup',{
                 Name:userName,
                 Password:password
             }).then((response)=>{console.log(response);
