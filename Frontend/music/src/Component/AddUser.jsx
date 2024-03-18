@@ -29,7 +29,7 @@ function AddUser() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:3000/adduser',{ID :formData.ID,Singer:formData.Singer,Song:formData.Song,Language:formData.Language,Created_By:formData.Created_By},{headers:{authorization:`Bearer ${token}`}})
+    axios.post('https://musicmahem-1.onrender.com/adduser',{ID :formData.ID,Singer:formData.Singer,Song:formData.Song,Language:formData.Language,Created_By:formData.Created_By},{headers:{authorization:`Bearer ${token}`}})
     .then(result=>{
         console.log(result);
         navigate("/")

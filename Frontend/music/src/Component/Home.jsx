@@ -19,7 +19,7 @@ export default function Home() {
         try {
           const header = new Headers({ "Access-Control-Allow-Origin": "*" });
     
-          const response = await fetch("http://localhost:3000/getallusers",  { 
+          const response = await fetch("https://musicmahem-1.onrender.com/getallusers",  { 
             headers:{
               "authorization":`Bearer ${token}`
             },
@@ -42,7 +42,7 @@ export default function Home() {
     
       const handleDelete=async(ID)=>{
         try{
-        await axios.delete(`http://localhost:3000/deleteuser/${ID}`,{headers:{authorization:`Bearer ${token}`}})
+        await axios.delete(`https://musicmahem-1.onrender.com/deleteuser/${ID}`,{headers:{authorization:`Bearer ${token}`}})
         .then(res=>console.log(res))
         .catch((err)=>console.log(err))
     
